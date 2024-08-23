@@ -41,6 +41,7 @@ make ; ./template
 ## :memo: To-Do
 
 ## :rocket: WIP
+- [ ] [Programs that do nothing](https://github.com/punchlemon/template/issurs/1)
 
 ## :star2: Done
 - [x] Add README.md
