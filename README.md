@@ -39,9 +39,9 @@ make ; ./template
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## :memo: To-Do
-- [ ] [mini_printf](https://github.com/punchlemon/template/issues/4)
 
 ## :rocket: WIP
+- [ ] [mini_printf](https://github.com/punchlemon/template/issues/4)
 
 ## :star2: Done
 - [x] [Programs that do nothing](https://github.com/punchlemon/template/issues/1)

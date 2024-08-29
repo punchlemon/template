@@ -1,16 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   template.h                                         :+:      :+:    :+:   */
+/*   common.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 13:13:02 by retanaka          #+#    #+#             */
-/*   Updated: 2024/08/23 13:13:06 by retanaka         ###   ########.fr       */
+/*   Created: 2024/08/28 19:10:07 by retanaka          #+#    #+#             */
+/*   Updated: 2024/08/28 19:10:09 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TEMPLATE_H
-# define TEMPLATE_H
+#ifndef COMMON_H
+# define COMMON_H
+# include <stdlib.h>
+
+// function
+size_t		ft_strlen(char *src);
 
 #endif

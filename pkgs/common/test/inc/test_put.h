@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   nothing.c                                          :+:      :+:    :+:   */
+/*   test_put.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 13:12:40 by retanaka          #+#    #+#             */
-/*   Updated: 2024/08/23 13:12:42 by retanaka         ###   ########.fr       */
+/*   Created: 2024/08/28 19:12:45 by retanaka          #+#    #+#             */
+/*   Updated: 2024/08/28 19:12:46 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef TEST_PUT_H
+# define TEST_PUT_H
+# include "put.h"
 
-void	do_nothing(void)
-{
-}
+#endif
