@@ -28,5 +28,6 @@ int	main(void)
 {
 	tst_put();
 	tst_put_num();
+	put("\n");
 	return (0);
 }

@@ -23,7 +23,8 @@ VFLAGS				=	 \
 						--leak-check=full \
 						--show-leak-kinds=all \
 
-LOGFILE				=	valgrind_result.log
+LOGFILE				=	$(TST_SRC_DIR)/valgrind_result.log
+NO_ERROR_STR		=	"ERROR SUMMARY: 0 errors from 0 contexts"
 
 OBJ_EXIST			=	.obj
 TST_OBJ_EXIST		=	.tst_obj
@@ -48,10 +49,24 @@ clean:
 
 re:						clean all
 
-test:					$(TST_NAME)
-						@valgrind $(VFLAGS) ./$(TST_NAME) > $(LOGFILE) 2>&1
-						test_clean
+RESULT_STRING		=	"(null)\nOK21"
 
+test:					$(LOGFILE)
+						@grep -v '^==[0-9]*==' $(LOGFILE) > $(TST_SRC_DIR)/filtered_result.log
+						@echo $(RESULT_STRING) > $(TST_SRC_DIR)/result
+						@if cmp -s $(TST_SRC_DIR)/filtered_result.log $(TST_SRC_DIR)/result; then \
+							echo "$(PKG_NAME) is OK"; \
+							rm $(LOGFILE); \
+							rm $(TST_SRC_DIR)/filtered_result.log; \
+							rm $(TST_SRC_DIR)/result; \
+						else \
+							echo "$(PKG_NAME) is KO!"; \
+							diff -u $(TST_SRC_DIR)/result $(TST_SRC_DIR)/filtered_result.log; \
+						fi
+						@make --no-print-directory test_clean
+
+$(LOGFILE):				$(TST_NAME)
+						@valgrind $(VFLAGS) ./$(TST_NAME) > $(LOGFILE) 2>&1
 
 $(TST_NAME):			$(OBJS) $(TST_OBJS)
 						@$(foreach pkg, $(PKGS), make --no-print-directory -C $(PKG_DIR)/$(pkg);)
@@ -67,6 +82,7 @@ $(TST_OBJ_EXIST):
 test_clean:
 						@$(RM) -rf $(OBJS)
 						@$(RM) -rf $(TST_OBJS)
+						@$(RM) -rf $(TST_NAME)
 
 re_test:				test_clean test
 
