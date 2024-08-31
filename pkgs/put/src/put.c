@@ -15,7 +15,7 @@
 int	put(char *src)
 {
 	if (!src)
-		return (write(1, "(null)\n", 7));
+		return (write(1, "(null)", 6));
 	return (write(1, src, ft_strlen(src)));
 }
 

@@ -23,7 +23,9 @@ VFLAGS				=	 \
 						--leak-check=full \
 						--show-leak-kinds=all \
 
-LOGFILE				=	$(TST_SRC_DIR)/valgrind_result.log
+EXPECTED_RESULT		=	$(TST_SRC_DIR)/expected_result
+REAL_RESULT			=	$(TST_SRC_DIR)/real_result
+VALGRIND_LOG		=	$(TST_SRC_DIR)/valgrind.log
 NO_ERROR_STR		=	"ERROR SUMMARY: 0 errors from 0 contexts"
 
 OBJ_EXIST			=	.obj
@@ -49,21 +51,41 @@ clean:
 
 re:						clean all
 
-RESULT_STRING		=	"(null)\nOK21"
+test_clean:
+						@$(RM) -rf $(OBJS) $(TST_OBJS)
+						@$(RM) $(TST_NAME) $(REAL_RESULT) $(EXPECTED_RESULT) $(VALGRIND_LOG)
 
-test:					$(LOGFILE)
-						@grep -v '^==[0-9]*==' $(LOGFILE) > $(TST_SRC_DIR)/filtered_result.log
-						@echo $(RESULT_STRING) > $(TST_SRC_DIR)/result
-						@if cmp -s $(TST_SRC_DIR)/filtered_result.log $(TST_SRC_DIR)/result; then \
+testmac:				$(TST_NAME) $(EXPECTED_RESULT)
+						@./$(TST_NAME) > $(REAL_RESULT) 2>&1
+						@if cmp -s $(REAL_RESULT) $(EXPECTED_RESULT); then \
 							echo "$(PKG_NAME) is OK"; \
-							rm $(LOGFILE); \
-							rm $(TST_SRC_DIR)/filtered_result.log; \
-							rm $(TST_SRC_DIR)/result; \
 						else \
 							echo "$(PKG_NAME) is KO!"; \
-							diff -u $(TST_SRC_DIR)/result $(TST_SRC_DIR)/filtered_result.log; \
+							colordiff -u $(EXPECTED_RESULT) $(REAL_RESULT) || true; \
 						fi
-						@make --no-print-directory test_clean
+						@make test_clean
+
+test:					$(LOGFILE) $(EXPECTED_RESULT)
+						@grep -v '^==[0-9]*==' $(LOGFILE) > $(REAL_RESULT)
+						@if cmp -s $(REAL_RESULT) $(EXPECTED_RESULT); then \
+							echo "$(PKG_NAME) is OK"; \
+						else \
+							echo "$(PKG_NAME) is KO!"; \
+							colordiff -u $(EXPECTED_RESULT) $(REAL_RESULT) || true; \
+						fi
+						@make test_clean
+
+$(EXPECTED_RESULT):
+						@echo "(null)" > $@
+						@echo "Hello world!" >> $@
+						@echo "" >> $@
+						@echo "42" >> $@
+						@echo "0" >> $@
+						@echo "-42" >> $@
+						@echo "9223372036854775806" >> $@
+						@echo "9223372036854775807" >> $@
+						@echo "-9223372036854775807" >> $@
+						@echo "-9223372036854775808" >> $@
 
 $(LOGFILE):				$(TST_NAME)
 						@valgrind $(VFLAGS) ./$(TST_NAME) > $(LOGFILE) 2>&1
@@ -78,12 +100,5 @@ $(TST_OBJ_DIR)/%.o:		$(TST_SRC_DIR)/%.c | $(TST_OBJ_EXIST)
 
 $(TST_OBJ_EXIST):
 						@mkdir -p $(TST_OBJ_DIR)
-
-test_clean:
-						@$(RM) -rf $(OBJS)
-						@$(RM) -rf $(TST_OBJS)
-						@$(RM) -rf $(TST_NAME)
-
-re_test:				test_clean test
 
 .PHONY:					all clean re test

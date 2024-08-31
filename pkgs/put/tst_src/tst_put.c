@@ -12,22 +12,29 @@
 
 #include "put.h"
 
-void	tst_put_num(void)
+void	tst_put_num(int64_t i)
 {
-	put_num(21);
+	put_num(i);
+	put("\n");
 }
 
-void	tst_put(void)
+void	tst_put(char *s)
 {
-	put(NULL);
-	put("");
-	put("OK");
+	put(s);
+	put("\n");
 }
 
 int	main(void)
 {
-	tst_put();
-	tst_put_num();
-	put("\n");
+	tst_put(NULL);
+	tst_put("Hello world!");
+	tst_put("");
+	tst_put_num(42);
+	tst_put_num(0);
+	tst_put_num(-42);
+	tst_put_num(9223372036854775806);
+	tst_put_num(9223372036854775807);
+	tst_put_num(-9223372036854775807);
+	tst_put_num(-9223372036854775807 -1);
 	return (0);
 }
