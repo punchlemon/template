@@ -1,16 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   template.h                                         :+:      :+:    :+:   */
+/*   tst_put.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 13:13:02 by retanaka          #+#    #+#             */
-/*   Updated: 2024/08/23 13:13:06 by retanaka         ###   ########.fr       */
+/*   Created: 2024/09/01 16:18:17 by retanaka          #+#    #+#             */
+/*   Updated: 2024/09/01 16:18:18 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TEMPLATE_H
-# define TEMPLATE_H
+#ifndef TST_PUT_H
+# define TST_PUT_H
+# include "put.h"
+
+void	tst_put(char *s);
+void	tst_put_num(int64_t i);
 
 #endif
