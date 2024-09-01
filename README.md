@@ -39,10 +39,9 @@ make ; ./template
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## :memo: To-Do
-- [ ] [mini_printf](https://github.com/punchlemon/template/issues/4)
 
 ## :rocket: WIP
 
 ## :star2: Done
-- [x] [Programs that do nothing](https://github.com/punchlemon/template/issues/1)
+- [x] [Programs that do nothing](https://github.com/punchlemon/template/issurs/1)
 - [x] Add README.md
