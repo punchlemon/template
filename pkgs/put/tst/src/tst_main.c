@@ -1,28 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tst_put.c                                          :+:      :+:    :+:   */
+/*   tst_main.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/28 19:12:32 by retanaka          #+#    #+#             */
-/*   Updated: 2024/08/28 19:12:34 by retanaka         ###   ########.fr       */
+/*   Created: 2024/09/01 16:19:09 by retanaka          #+#    #+#             */
+/*   Updated: 2024/09/01 16:19:09 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "put.h"
-
-void	tst_put_num(int64_t i)
-{
-	put_num(i);
-	put("\n");
-}
-
-void	tst_put(char *s)
-{
-	put(s);
-	put("\n");
-}
+#include "tst_put.h"
 
 int	main(void)
 {
