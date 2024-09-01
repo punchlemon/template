@@ -12,10 +12,18 @@
 
 #include "tst_common.h"
 
-void	tst_ft_strlen(char *s, size_t len)
+void	tst_ft_strlen(void)
 {
-	if (ft_strlen(s) == len)
-		write(1, "OK\n", 3);
+	if (ft_strlen("") == 0)
+		write(1, "0\n", 2);
 	else
-		write(1, "KO!\n", 4);
+		write(1, "1\n", 2);
+	if (ft_strlen(NULL) == 0)
+		write(1, "0\n", 2);
+	else
+		write(1, "1\n", 2);
+	if (ft_strlen("Hello world!") == 12)
+		write(1, "12\n", 3);
+	else
+		write(1, "1\n", 2);
 }
