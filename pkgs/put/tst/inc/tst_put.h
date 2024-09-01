@@ -14,7 +14,7 @@
 # define TST_PUT_H
 # include "put.h"
 
-void	tst_put(char *s);
-void	tst_put_num(int64_t i);
+void	tst_put(void);
+void	tst_put_num(void);
 
 #endif

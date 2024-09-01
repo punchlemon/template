@@ -15,6 +15,6 @@
 # include <unistd.h>
 # include "common.h"
 
-void	tst_ft_strlen(char *s, size_t len);
+void	tst_ft_strlen(void);
 
 #endif

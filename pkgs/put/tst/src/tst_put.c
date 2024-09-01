@@ -12,14 +12,30 @@
 
 #include "tst_put.h"
 
-void	tst_put(char *s)
+void	tst_put(void)
 {
-	put(s);
+	put(NULL);
+	put("\n");
+	put("Hello world!");
+	put("\n");
+	put("");
 	put("\n");
 }
 
-void	tst_put_num(int64_t i)
+void	tst_put_num(void)
 {
-	put_num(i);
+	put_num(42);
+	put("\n");
+	put_num(0);
+	put("\n");
+	put_num(-42);
+	put("\n");
+	put_num(9223372036854775806);
+	put("\n");
+	put_num(9223372036854775807);
+	put("\n");
+	put_num(-9223372036854775807);
+	put("\n");
+	put_num(-9223372036854775807 -1);
 	put("\n");
 }
