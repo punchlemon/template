@@ -41,8 +41,7 @@ make ; ./template
 ## :memo: To-Do
 
 ## :rocket: WIP
-- [ ] [mini_printf](https://github.com/punchlemon/template/issues/4)
 
 ## :star2: Done
-- [x] [Programs that do nothing](https://github.com/punchlemon/template/issues/1)
+- [x] [Programs that do nothing](https://github.com/punchlemon/template/issurs/1)
 - [x] Add README.md

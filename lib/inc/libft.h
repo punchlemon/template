@@ -1,28 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tst_main.c                                         :+:      :+:    :+:   */
+/*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/01 16:19:09 by retanaka          #+#    #+#             */
-/*   Updated: 2024/09/01 16:19:09 by retanaka         ###   ########.fr       */
+/*   Created: 2024/08/23 13:12:25 by retanaka          #+#    #+#             */
+/*   Updated: 2024/08/23 13:12:33 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tst_put.h"
+#ifndef LIBFT_H
+# define LIBFT_H
 
-int	main(void)
-{
-	tst_put(NULL);
-	tst_put("Hello world!");
-	tst_put("");
-	tst_put_num(42);
-	tst_put_num(0);
-	tst_put_num(-42);
-	tst_put_num(9223372036854775806);
-	tst_put_num(9223372036854775807);
-	tst_put_num(-9223372036854775807);
-	tst_put_num(-9223372036854775807 -1);
-	return (0);
-}
+void		do_nothing(void);
+
+#endif

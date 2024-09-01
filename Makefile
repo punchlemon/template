@@ -3,18 +3,15 @@ LIB					=	ft
 INC_DIR				=	inc
 SRC_DIR				=	src
 OBJ_DIR				=	obj
-PKG_DIR				=	pkgs
-
-PKGS				=	 \
-						put \
+LIB_DIR				=	lib
 
 FILES				=	 \
 						main \
 
 CC					=	cc
 CFLAGS				=	-Wall -Werror -Wextra -g
-IFLAGS				=	-I$(INC_DIR) -I$(PKG_DIR)/$(INC_DIR)
-LFLAGS				=	-L$(PKG_DIR) -l$(LIB)
+IFLAGS				=	-I$(INC_DIR) -I$(LIB_DIR)/$(INC_DIR)
+LFLAGS				=	-L$(LIB_DIR) -l$(LIB)
 VFLAGS				=	 \
 						--track-origins=yes \
 						--leak-check=full \
@@ -40,11 +37,11 @@ val:					re
 						@code $(LOGFILE)
 
 $(NAME):				$(OBJS)
-						@make all --no-print-directory -C $(PKG_DIR)
+						@make all --no-print-directory -C $(LIB_DIR)
 						@$(CC) $(OBJS) $(LFLAGS) -o $(NAME)
 
 lib_clean:
-						@make clean --no-print-directory -C $(PKG_DIR)
+						@make clean --no-print-directory -C $(LIB_DIR)
 
 clean:					lib_clean
 						@$(RM) -rf $(OBJ_DIR)
@@ -58,7 +55,7 @@ re:						fclean all
 norm:
 						@$(call check_norminette, $(SRC_DIR))
 						@$(call check_norminette, $(INC_DIR))
-						@$(call check_norminette, $(PKG_DIR))
+						@$(call check_norminette, $(LIB_DIR))
 
 define check_norminette
 						@if norminette $1 | grep -q Error; then \
