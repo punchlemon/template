@@ -1,17 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   nothing.c                                          :+:      :+:    :+:   */
+/*   tst_main.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 13:12:40 by retanaka          #+#    #+#             */
-/*   Updated: 2024/08/23 13:12:42 by retanaka         ###   ########.fr       */
+/*   Created: 2024/09/01 15:36:21 by retanaka          #+#    #+#             */
+/*   Updated: 2024/09/01 15:36:23 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "tst_common.h"
 
-void	do_nothing(void)
+int	main(void)
 {
+	tst_ft_strlen("", 0);
+	tst_ft_strlen(NULL, 0);
+	tst_ft_strlen("Hello world!", 12);
 }

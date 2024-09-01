@@ -1,16 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   template.h                                         :+:      :+:    :+:   */
+/*   tst_common.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/23 13:13:02 by retanaka          #+#    #+#             */
-/*   Updated: 2024/08/23 13:13:06 by retanaka         ###   ########.fr       */
+/*   Created: 2024/09/01 15:42:13 by retanaka          #+#    #+#             */
+/*   Updated: 2024/09/01 15:42:14 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TEMPLATE_H
-# define TEMPLATE_H
+#ifndef TST_COMMON_H
+# define TST_COMMON_H
+# include <unistd.h>
+# include "common.h"
+
+void	tst_ft_strlen(char *s, size_t len);
 
 #endif
