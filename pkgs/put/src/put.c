@@ -19,7 +19,7 @@ int	put(char *src)
 	return (write(1, src, ft_strlen(src)));
 }
 
-int	put_num(int64_t num)
+int	put_d64(int64_t num)
 {
 	char	buffer[20];
 	char	*ptr;
@@ -40,5 +40,21 @@ int	put_num(int64_t num)
 	}
 	if (is_negative)
 		*(--ptr) = '-';
+	return (write(1, ptr, buffer + 20 - ptr));
+}
+
+int	put_ud64(uint64_t num)
+{
+	char	buffer[20];
+	char	*ptr;
+
+	ptr = buffer + 20;
+	while (1)
+	{
+		*(--ptr) = '0' + (num % 10);
+		num /= 10;
+		if (num == 0)
+			break ;
+	}
 	return (write(1, ptr, buffer + 20 - ptr));
 }
