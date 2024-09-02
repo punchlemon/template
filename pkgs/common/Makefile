@@ -21,6 +21,9 @@ PKG_NAME				=	common
 PKGS					=	 \
 
 
+TST_PKGS				=	 \
+							put \
+
 FILES					=	 \
 							ft_strlen \
 # ============================= End of Editable ============================= #
@@ -32,6 +35,7 @@ all:						$(OBJS)
 
 $(OBJ_DIR)/%.o:				$(SRC_DIR)/%.c | $(OBJ_EXIST)
 							@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+							@$(foreach pkg, $(PKGS), $(shell make -C $(PKG_DIR)/$(pkg)))
 
 $(OBJ_EXIST):
 							@mkdir -p $(OBJ_DIR)
@@ -41,6 +45,7 @@ print-objs:
 
 clean:						test_clean
 							@$(RM) -rf $(OBJ_DIR)
+							@$(foreach pkg, $(PKGS), $(shell make -C $(PKG_DIR)/$(pkg) clean))
 
 re:							clean all
 
@@ -50,7 +55,7 @@ DEF						=	\033[0m
 RED						=	\033[31m
 GRN						=	\033[32m
 
-TST_IFLAGS				=	 -I$(TST_DIR)/$(INC_DIR)
+TST_IFLAGS				=	 -I$(TST_DIR)/$(INC_DIR) $(foreach tst_pkg, $(TST_PKGS), -I$(PKG_DIR)/$(tst_pkg)/$(INC_DIR))
 VFLAGS					=	 \
 							--track-origins=yes \
 							--leak-check=full \
@@ -75,9 +80,11 @@ $(VALGRIND_LOG):			$(TST_NAME)
 
 $(TST_NAME):				$(OBJS) $(TST_OBJS)
 							@PKG_OBJS=; \
-							$(foreach pkg, $(PKGS), make $(NPD_FLAG) -C $(PKG_DIR)/$(pkg);) \
+							TST_PKG_OBJS=; \
 							$(foreach pkg, $(PKGS), $(eval PKG_OBJS += $(PKG_DIR)/$(pkg)/$(shell make -C $(PKG_DIR)/$(pkg) print-objs))) \
-							$(CC) $(CFLAGS) $(IFLAGS) $(TST_IFLAGS) $(OBJS) $(PKG_OBJS) $(TST_OBJS) -o $@
+							$(foreach tst_pkg, $(TST_PKGS), make $(NPD_FLAG) -C $(PKG_DIR)/$(tst_pkg);) \
+							$(foreach tst_pkg, $(TST_PKGS), $(eval TST_PKG_OBJS += $(PKG_DIR)/$(tst_pkg)/$(shell make -C $(PKG_DIR)/$(tst_pkg) print-objs))) \
+							$(CC) $(CFLAGS) $(IFLAGS) $(TST_IFLAGS) $(OBJS) $(PKG_OBJS) $(TST_OBJS) $(TST_PKG_OBJS) -o $@
 
 $(TST_DIR)/$(OBJ_DIR)/%.o:	$(TST_DIR)/$(SRC_DIR)/%.c | $(TST_OBJ_EXIST)
 							@$(CC) $(CFLAGS) $(IFLAGS) $(TST_IFLAGS) -c $< -o $@

@@ -15,15 +15,15 @@
 void	tst_ft_strlen(void)
 {
 	if (ft_strlen("") == 0)
-		write(1, "0\n", 2);
+		put("0\n");
 	else
-		write(1, "1\n", 2);
+		put("1\n");
 	if (ft_strlen(NULL) == 0)
-		write(1, "0\n", 2);
+		put("0\n");
 	else
-		write(1, "1\n", 2);
+		put("1\n");
 	if (ft_strlen("Hello world!") == 12)
-		write(1, "12\n", 3);
+		put("12\n");
 	else
-		write(1, "1\n", 2);
+		put("1\n");
 }
