@@ -22,20 +22,32 @@ void	tst_put(void)
 	put("\n");
 }
 
-void	tst_put_num(void)
+void	tst_put_d64(void)
 {
-	put_num(42);
+	put_d64(42);
 	put("\n");
-	put_num(0);
+	put_d64(0);
 	put("\n");
-	put_num(-42);
+	put_d64(-42);
 	put("\n");
-	put_num(9223372036854775806);
+	put_d64(INT64_MAX - 1);
 	put("\n");
-	put_num(9223372036854775807);
+	put_d64(INT64_MAX);
 	put("\n");
-	put_num(-9223372036854775807);
+	put_d64(INT64_MIN + 1);
 	put("\n");
-	put_num(-9223372036854775807 -1);
+	put_d64(INT64_MIN);
+	put("\n");
+}
+
+void	tst_put_ud64(void)
+{
+	put_ud64(42);
+	put("\n");
+	put_ud64(0);
+	put("\n");
+	put_ud64(UINT64_MAX);
+	put("\n");
+	put_ud64(UINT64_MAX - 1);
 	put("\n");
 }

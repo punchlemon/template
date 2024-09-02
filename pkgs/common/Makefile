@@ -35,7 +35,7 @@ all:						$(OBJS)
 
 $(OBJ_DIR)/%.o:				$(SRC_DIR)/%.c | $(OBJ_EXIST)
 							@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
-							@$(foreach pkg, $(PKGS), $(shell make -C $(PKG_DIR)/$(pkg)))
+							@$(foreach pkg, $(PKGS), make -C $(PKG_DIR)/$(pkg))
 
 $(OBJ_EXIST):
 							@mkdir -p $(OBJ_DIR)
@@ -45,7 +45,7 @@ print-objs:
 
 clean:						test_clean
 							@$(RM) -rf $(OBJ_DIR)
-							@$(foreach pkg, $(PKGS), $(shell make -C $(PKG_DIR)/$(pkg) clean))
+							@$(foreach pkg, $(PKGS), make -C $(PKG_DIR)/$(pkg) clean)
 
 re:							clean all
 
@@ -82,7 +82,7 @@ $(TST_NAME):				$(OBJS) $(TST_OBJS)
 							@PKG_OBJS=; \
 							TST_PKG_OBJS=; \
 							$(foreach pkg, $(PKGS), $(eval PKG_OBJS += $(PKG_DIR)/$(pkg)/$(shell make -C $(PKG_DIR)/$(pkg) print-objs))) \
-							$(foreach tst_pkg, $(TST_PKGS), make $(NPD_FLAG) -C $(PKG_DIR)/$(tst_pkg);) \
+							$(foreach tst_pkg, $(TST_PKGS), make -C $(PKG_DIR)/$(tst_pkg);) \
 							$(foreach tst_pkg, $(TST_PKGS), $(eval TST_PKG_OBJS += $(PKG_DIR)/$(tst_pkg)/$(shell make -C $(PKG_DIR)/$(tst_pkg) print-objs))) \
 							$(CC) $(CFLAGS) $(IFLAGS) $(TST_IFLAGS) $(OBJS) $(PKG_OBJS) $(TST_OBJS) $(TST_PKG_OBJS) -o $@
 
@@ -102,11 +102,13 @@ endef
 
 otest:						output_test
 
-mtest:						memory_test test_clean
+mtest:						memory_test
 
 ntest:						norminette_test
 
 test:						output_test norminette_test test_clean
+
+retest:						log_clean test
 
 output_test:				$(TST_NAME) $(EXPECTED_RESULT_LOG)
 							@./$(TST_NAME) > $(REAL_RESULT_LOG) 2>&1
@@ -148,6 +150,9 @@ endef
 test_clean:
 							@$(RM) -rf $(TST_DIR)/$(OBJ_DIR)
 							@$(RM) $(TST_NAME)
+
+log_clean:
+							@$(RM) $(REAL_RESULT_LOG) $(EXPECTED_RESULT_LOG) $(VALGRIND_LOG) $(NORM_LOG)
 
 # ============================== Editable Area ============================== #
 $(EXPECTED_RESULT_LOG):
