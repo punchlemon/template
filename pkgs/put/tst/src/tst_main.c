@@ -14,15 +14,7 @@
 
 int	main(void)
 {
-	tst_put(NULL);
-	tst_put("Hello world!");
-	tst_put("");
-	tst_put_num(42);
-	tst_put_num(0);
-	tst_put_num(-42);
-	tst_put_num(9223372036854775806);
-	tst_put_num(9223372036854775807);
-	tst_put_num(-9223372036854775807);
-	tst_put_num(-9223372036854775807 -1);
+	tst_put();
+	tst_put_num();
 	return (0);
 }

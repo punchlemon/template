@@ -14,7 +14,6 @@
 
 int	main(void)
 {
-	tst_ft_strlen("", 0);
-	tst_ft_strlen(NULL, 0);
-	tst_ft_strlen("Hello world!", 12);
+	tst_ft_strlen();
+	return (0);
 }

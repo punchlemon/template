@@ -13,8 +13,9 @@
 #ifndef TST_COMMON_H
 # define TST_COMMON_H
 # include <unistd.h>
+# include "put.h"
 # include "common.h"
 
-void	tst_ft_strlen(char *s, size_t len);
+void	tst_ft_strlen(void);
 
 #endif
