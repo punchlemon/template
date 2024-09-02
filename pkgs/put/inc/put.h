@@ -21,6 +21,7 @@
 
 // function
 int			put(char *src);
-int			put_num(int64_t num);
+int			put_d64(int64_t num);
+int			put_ud64(uint64_t num);
 
 #endif

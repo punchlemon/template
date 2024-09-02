@@ -15,6 +15,7 @@
 int	main(void)
 {
 	tst_put();
-	tst_put_num();
+	tst_put_d64();
+	tst_put_ud64();
 	return (0);
 }
