@@ -16,16 +16,17 @@ IFLAGS					=	-I$(INC_DIR) $(foreach pkg, $(PKGS), -I$(PKG_DIR)/$(pkg)/$(INC_DIR)
 OBJ_EXIST				=	.obj
 
 # ============================== Editable Area ============================== #
-PKG_NAME				=	common
+PKG_NAME				=	slice
 
 PKGS					=	 \
 
 
 TST_PKGS				=	 \
+							common \
 							put \
 
 FILES					=	 \
-							ft_strlen \
+							slice \
 # ============================= End of Editable ============================= #
 
 SRCS					=	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(FILES)))
@@ -158,7 +159,34 @@ log_clean:
 # ============================== Editable Area ============================== #
 $(EXPECTED_RESULT_LOG):
 							@touch $@
-							@echo "0" >> $@
-							@echo "0" >> $@
-							@echo "12" >> $@
+							@echo "If *cap is NULL, update_cap return : -1" >> $@
+							@echo "len = 0, cap = 0" >> $@
+							@echo "update_cap result : 0" >> $@
+							@echo "new cap : 0" >> $@
+							@echo "len = 1, cap = 0" >> $@
+							@echo "update_cap result : 1" >> $@
+							@echo "new cap : 1" >> $@
+							@echo "len = 200, cap = 0" >> $@
+							@echo "update_cap result : 1" >> $@
+							@echo "new cap : 256" >> $@
+							@echo "len = 200, cap = 199" >> $@
+							@echo "update_cap result : 1" >> $@
+							@echo "new cap : 398" >> $@
+							@echo "len = 200, cap = 200" >> $@
+							@echo "update_cap result : 0" >> $@
+							@echo "new cap : 200" >> $@
+							@echo "len = 200, cap = 201" >> $@
+							@echo "update_cap result : 0" >> $@
+							@echo "new cap : 201" >> $@
+							@echo "len = 1025, cap = 0" >> $@
+							@echo "update_cap result : 1" >> $@
+							@echo "new cap : 1280" >> $@
+							@echo "len = 1025, cap = 1023" >> $@
+							@echo "update_cap result : 1" >> $@
+							@echo "new cap : 2046" >> $@
+							@echo "len = 1025, cap = 1024" >> $@
+							@echo "update_cap result : 1" >> $@
+							@echo "new cap : 1280" >> $@
+							@echo "42" >> $@
+							@echo "64" >> $@
 # ============================= End of Editable ============================= #
