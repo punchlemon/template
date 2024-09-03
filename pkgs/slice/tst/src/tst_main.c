@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tst_put.h                                          :+:      :+:    :+:   */
+/*   tst_main.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/01 16:18:17 by retanaka          #+#    #+#             */
-/*   Updated: 2024/09/01 16:18:18 by retanaka         ###   ########.fr       */
+/*   Created: 2024/09/01 16:19:09 by retanaka          #+#    #+#             */
+/*   Updated: 2024/09/01 16:19:09 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TST_PUT_H
-# define TST_PUT_H
-# include "put.h"
+#include "tst_slice.h"
 
-void	tst_put(void);
-void	tst_put_d64(void);
-void	tst_put_ud64(void);
-
-#endif
+int	main(void)
+{
+	tst_update_cap();
+	tst_create_byte_slice();
+	return (0);
+}

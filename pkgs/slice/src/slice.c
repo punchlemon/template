@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   put.c                                              :+:      :+:    :+:   */
+/*   slice.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,51 +10,49 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "put.h"
+#include "slice.h"
+#include <unistd.h>
 
-int	put(char *src)
+int	update_cap(uint64_t len, uint64_t *cap)
 {
-	if (!src)
-		return (write(1, "(null)", 6));
-	return (write(1, src, ft_strlen(src)));
-}
-
-int	put_d64(int64_t num)
-{
-	char	buffer[20];
-	char	*ptr;
-	int		is_negative;
-
-	if (num == INT64_MIN)
-		return (write(1, INTMIN_ADDR, 20));
-	ptr = buffer + 20;
-	is_negative = num < 0;
-	if (is_negative)
-		num = -num;
+	if (!cap)
+		return (-1);
+	if (*cap >= len)
+		return (0);
+	if (*cap == 0)
+		*cap = 1;
 	while (1)
 	{
-		*(--ptr) = '0' + (num % 10);
-		num /= 10;
-		if (num == 0)
-			break ;
+		if (*cap >= len)
+			return (1);
+		if (*cap < 1024)
+			*cap *= 2;
+		else
+			*cap *= 1.25;
 	}
-	if (is_negative)
-		*(--ptr) = '-';
-	return (write(1, ptr, buffer + 20 - ptr));
 }
 
-int	put_ud64(uint64_t num)
+t_slice	*create_byte_slice(uint64_t len)
 {
-	char	buffer[20];
-	char	*ptr;
+	t_slice	*s;
 
-	ptr = buffer + 20;
-	while (1)
-	{
-		*(--ptr) = '0' + (num % 10);
-		num /= 10;
-		if (num == 0)
-			break ;
-	}
-	return (write(1, ptr, buffer + 20 - ptr));
+	s = malloc(sizeof(t_slice));
+	if (!s)
+		return (NULL);
+	s->l = len;
+	s->c = 1;
+	update_cap(s->l, &s->c);
+	s->p = malloc(s->c);
+	if (!s->p)
+		return (free(s), NULL);
+	return (s);
+}
+
+void	delete_byte_slice(t_slice *s)
+{
+	if (!s)
+		return ;
+	if (s->p)
+		free(s->p);
+	return (free(s));
 }

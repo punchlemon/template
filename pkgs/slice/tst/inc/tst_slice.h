@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tst_put.h                                          :+:      :+:    :+:   */
+/*   tst_slice.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,12 +10,14 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TST_PUT_H
-# define TST_PUT_H
+#ifndef TST_SLICE_H
+# define TST_SLICE_H
 # include "put.h"
+# include "slice.h"
 
-void	tst_put(void);
-void	tst_put_d64(void);
-void	tst_put_ud64(void);
+// function
+void	tst_update_cap(void);
+void	tst_create_byte_slice(void);
+void	tst_delete_byte_slice(void);
 
 #endif

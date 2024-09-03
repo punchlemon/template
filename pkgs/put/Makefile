@@ -21,6 +21,9 @@ PKG_NAME			=	put
 PKGS				=	 \
 						common \
 
+TST_PKGS				=	 \
+
+
 FILES				=	 \
 						put \
 # ============================= End of Editable ============================= #
@@ -32,6 +35,7 @@ all:						$(OBJS)
 
 $(OBJ_DIR)/%.o:				$(SRC_DIR)/%.c | $(OBJ_EXIST)
 							@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+							@$(foreach pkg, $(PKGS), make -C $(PKG_DIR)/$(pkg);)
 
 $(OBJ_EXIST):
 							@mkdir -p $(OBJ_DIR)
@@ -39,8 +43,9 @@ $(OBJ_EXIST):
 print-objs:
 							@echo $(OBJS)
 
-clean:						test_clean
+clean:
 							@$(RM) -rf $(OBJ_DIR)
+							@$(foreach pkg, $(PKGS), make -C $(PKG_DIR)/$(pkg) clean;)
 
 re:							clean all
 
@@ -50,7 +55,7 @@ DEF						=	\033[0m
 RED						=	\033[31m
 GRN						=	\033[32m
 
-TST_IFLAGS				=	 -I$(TST_DIR)/$(INC_DIR)
+TST_IFLAGS				=	 -I$(TST_DIR)/$(INC_DIR) $(foreach tst_pkg, $(TST_PKGS), -I$(PKG_DIR)/$(tst_pkg)/$(INC_DIR))
 VFLAGS					=	 \
 							--track-origins=yes \
 							--leak-check=full \
@@ -75,9 +80,11 @@ $(VALGRIND_LOG):			$(TST_NAME)
 
 $(TST_NAME):				$(OBJS) $(TST_OBJS)
 							@PKG_OBJS=; \
-							$(foreach pkg, $(PKGS), make $(NPD_FLAG) -C $(PKG_DIR)/$(pkg);) \
-							$(foreach pkg, $(PKGS), $(eval PKG_OBJS += $(PKG_DIR)/$(pkg)/$(shell make -C $(PKG_DIR)/$(pkg) print-objs))) \
-							$(CC) $(CFLAGS) $(IFLAGS) $(TST_IFLAGS) $(OBJS) $(PKG_OBJS) $(TST_OBJS) -o $@
+							TST_PKG_OBJS=; \
+							$(foreach pkg, $(PKGS), $(eval PKG_OBJS += $(PKG_DIR)/$(pkg)/$(shell make -C $(PKG_DIR)/$(pkg) print-objs;))) \
+							$(foreach tst_pkg, $(TST_PKGS), make -C $(PKG_DIR)/$(tst_pkg);) \
+							$(foreach tst_pkg, $(TST_PKGS), $(eval TST_PKG_OBJS += $(PKG_DIR)/$(tst_pkg)/$(shell make -C $(PKG_DIR)/$(tst_pkg) print-objs;))) \
+							$(CC) $(CFLAGS) $(IFLAGS) $(TST_IFLAGS) $(OBJS) $(PKG_OBJS) $(TST_OBJS) $(TST_PKG_OBJS) -o $@
 
 $(TST_DIR)/$(OBJ_DIR)/%.o:	$(TST_DIR)/$(SRC_DIR)/%.c | $(TST_OBJ_EXIST)
 							@$(CC) $(CFLAGS) $(IFLAGS) $(TST_IFLAGS) -c $< -o $@
@@ -95,11 +102,13 @@ endef
 
 otest:						output_test
 
-mtest:						memory_test test_clean
+mtest:						memory_test
 
 ntest:						norminette_test
 
 test:						output_test norminette_test test_clean
+
+retest:						log_clean test
 
 output_test:				$(TST_NAME) $(EXPECTED_RESULT_LOG)
 							@./$(TST_NAME) > $(REAL_RESULT_LOG) 2>&1
@@ -140,7 +149,11 @@ endef
 
 test_clean:
 							@$(RM) -rf $(TST_DIR)/$(OBJ_DIR)
+							@$(foreach tst_pkg, $(TST_PKGS), make -C $(PKG_DIR)/$(tst_pkg) clean;)
 							@$(RM) $(TST_NAME)
+
+log_clean:
+							@$(RM) $(REAL_RESULT_LOG) $(EXPECTED_RESULT_LOG) $(VALGRIND_LOG) $(NORM_LOG)
 
 # ============================== Editable Area ============================== #
 $(EXPECTED_RESULT_LOG):
@@ -155,4 +168,8 @@ $(EXPECTED_RESULT_LOG):
 							@echo "9223372036854775807" >> $@
 							@echo "-9223372036854775807" >> $@
 							@echo "-9223372036854775808" >> $@
+							@echo "42" >> $@
+							@echo "0" >> $@
+							@echo "18446744073709551615" >> $@
+							@echo "18446744073709551614" >> $@
 # ============================= End of Editable ============================= #
