@@ -16,6 +16,8 @@
 # include "slice.h"
 
 // function
+void	tst_update_cap(void);
 void	tst_create_byte_slice(void);
+void	tst_delete_byte_slice(void);
 
 #endif

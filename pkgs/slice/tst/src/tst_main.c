@@ -14,7 +14,7 @@
 
 int	main(void)
 {
+	tst_update_cap();
 	tst_create_byte_slice();
-	put("\n");
 	return (0);
 }

@@ -11,18 +11,48 @@
 /* ************************************************************************** */
 
 #include "slice.h"
+#include <unistd.h>
+
+int	update_cap(uint64_t len, uint64_t *cap)
+{
+	if (!cap)
+		return (-1);
+	if (*cap >= len)
+		return (0);
+	if (*cap == 0)
+		*cap = 1;
+	while (1)
+	{
+		if (*cap >= len)
+			return (1);
+		if (*cap < 1024)
+			*cap *= 2;
+		else
+			*cap *= 1.25;
+	}
+}
 
 t_slice	*create_byte_slice(uint64_t len)
 {
-	t_slice	*res;
+	t_slice	*s;
 
-	res = malloc(sizeof(t_slice));
-	if (!res)
+	s = malloc(sizeof(t_slice));
+	if (!s)
 		return (NULL);
-	res->p = malloc(len);
-	if (!res)
-		return (free(res), NULL);
-	res->l = len;
-	res->c = len;
-	return (res);
+	s->l = len;
+	s->c = 1;
+	update_cap(s->l, &s->c);
+	s->p = malloc(s->c);
+	if (!s->p)
+		return (free(s), NULL);
+	return (s);
+}
+
+void	delete_byte_slice(t_slice *s)
+{
+	if (!s)
+		return ;
+	if (s->p)
+		free(s->p);
+	return (free(s));
 }

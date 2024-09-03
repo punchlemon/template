@@ -35,7 +35,7 @@ all:						$(OBJS)
 
 $(OBJ_DIR)/%.o:				$(SRC_DIR)/%.c | $(OBJ_EXIST)
 							@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
-							@$(foreach pkg, $(PKGS), make -C $(PKG_DIR)/$(pkg))
+							@$(foreach pkg, $(PKGS), make -C $(PKG_DIR)/$(pkg);)
 
 $(OBJ_EXIST):
 							@mkdir -p $(OBJ_DIR)
@@ -43,9 +43,9 @@ $(OBJ_EXIST):
 print-objs:
 							@echo $(OBJS)
 
-clean:						test_clean
+clean:
 							@$(RM) -rf $(OBJ_DIR)
-							@$(foreach pkg, $(PKGS), make -C $(PKG_DIR)/$(pkg) clean)
+							@$(foreach pkg, $(PKGS), make -C $(PKG_DIR)/$(pkg) clean;)
 
 re:							clean all
 
@@ -81,9 +81,9 @@ $(VALGRIND_LOG):			$(TST_NAME)
 $(TST_NAME):				$(OBJS) $(TST_OBJS)
 							@PKG_OBJS=; \
 							TST_PKG_OBJS=; \
-							$(foreach pkg, $(PKGS), $(eval PKG_OBJS += $(PKG_DIR)/$(pkg)/$(shell make -C $(PKG_DIR)/$(pkg) print-objs))) \
+							$(foreach pkg, $(PKGS), $(eval PKG_OBJS += $(PKG_DIR)/$(pkg)/$(shell make -C $(PKG_DIR)/$(pkg) print-objs;))) \
 							$(foreach tst_pkg, $(TST_PKGS), make -C $(PKG_DIR)/$(tst_pkg);) \
-							$(foreach tst_pkg, $(TST_PKGS), $(eval TST_PKG_OBJS += $(PKG_DIR)/$(tst_pkg)/$(shell make -C $(PKG_DIR)/$(tst_pkg) print-objs))) \
+							$(foreach tst_pkg, $(TST_PKGS), $(eval TST_PKG_OBJS += $(PKG_DIR)/$(tst_pkg)/$(shell make -C $(PKG_DIR)/$(tst_pkg) print-objs;))) \
 							$(CC) $(CFLAGS) $(IFLAGS) $(TST_IFLAGS) $(OBJS) $(PKG_OBJS) $(TST_OBJS) $(TST_PKG_OBJS) -o $@
 
 $(TST_DIR)/$(OBJ_DIR)/%.o:	$(TST_DIR)/$(SRC_DIR)/%.c | $(TST_OBJ_EXIST)
@@ -149,6 +149,7 @@ endef
 
 test_clean:
 							@$(RM) -rf $(TST_DIR)/$(OBJ_DIR)
+							@$(foreach tst_pkg, $(TST_PKGS), make -C $(PKG_DIR)/$(tst_pkg) clean;)
 							@$(RM) $(TST_NAME)
 
 log_clean:

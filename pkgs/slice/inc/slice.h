@@ -24,6 +24,8 @@ typedef struct s_slice
 }	t_slice;
 
 // function
+int		update_cap(uint64_t len, uint64_t *cap);
 t_slice	*create_byte_slice(uint64_t len);
+void	delete_byte_slice(t_slice *s);
 
 #endif
