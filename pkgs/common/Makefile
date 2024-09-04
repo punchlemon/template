@@ -22,10 +22,16 @@ PKGS					=	 \
 
 
 TST_PKGS				=	 \
-							put \
+							mini_printf \
 
 FILES					=	 \
 							ft_strlen \
+
+### BEGIN
+# 0
+# 0
+# 12
+### END
 # ============================= End of Editable ============================= #
 
 SRCS					=	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(FILES)))
@@ -78,12 +84,15 @@ NO_LEAKS_STR			=	"All heap blocks were freed -- no leaks are possible"
 $(VALGRIND_LOG):			$(TST_NAME)
 							@valgrind $(VFLAGS) ./$(TST_NAME) > $(VALGRIND_LOG) 2>&1
 
+$(EXPECTED_RESULT_LOG):
+							@sed -n '/^### BEGIN$$/,/^### END$$/p' $(MAKEFILE_LIST) | sed '1d; $$d' | sed 's/^# //' > $(EXPECTED_RESULT_LOG)
+
 $(TST_NAME):				$(OBJS) $(TST_OBJS)
 							@PKG_OBJS=; \
 							TST_PKG_OBJS=; \
-							$(foreach pkg, $(PKGS), $(eval PKG_OBJS += $(PKG_DIR)/$(pkg)/$(shell make -C $(PKG_DIR)/$(pkg) print-objs;))) \
+							$(foreach pkg, $(PKGS), $(eval PKG_OBJS += $(addprefix $(PKG_DIR)/$(pkg)/, $(shell make -C $(PKG_DIR)/$(pkg) print-objs;)))) \
 							$(foreach tst_pkg, $(TST_PKGS), make -C $(PKG_DIR)/$(tst_pkg);) \
-							$(foreach tst_pkg, $(TST_PKGS), $(eval TST_PKG_OBJS += $(PKG_DIR)/$(tst_pkg)/$(shell make -C $(PKG_DIR)/$(tst_pkg) print-objs;))) \
+							$(foreach tst_pkg, $(TST_PKGS), $(eval TST_PKG_OBJS += $(addprefix $(PKG_DIR)/$(tst_pkg)/, $(shell make -C $(PKG_DIR)/$(tst_pkg) print-objs;)))) \
 							$(CC) $(CFLAGS) $(IFLAGS) $(TST_IFLAGS) $(OBJS) $(PKG_OBJS) $(TST_OBJS) $(TST_PKG_OBJS) -o $@
 
 $(TST_DIR)/$(OBJ_DIR)/%.o:	$(TST_DIR)/$(SRC_DIR)/%.c | $(TST_OBJ_EXIST)
@@ -154,11 +163,3 @@ test_clean:
 
 log_clean:
 							@$(RM) $(REAL_RESULT_LOG) $(EXPECTED_RESULT_LOG) $(VALGRIND_LOG) $(NORM_LOG)
-
-# ============================== Editable Area ============================== #
-$(EXPECTED_RESULT_LOG):
-							@touch $@
-							@echo "0" >> $@
-							@echo "0" >> $@
-							@echo "12" >> $@
-# ============================= End of Editable ============================= #
