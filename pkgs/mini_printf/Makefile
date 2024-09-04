@@ -16,7 +16,7 @@ IFLAGS					=	-I$(INC_DIR) $(foreach pkg, $(PKGS), -I$(PKG_DIR)/$(pkg)/$(INC_DIR)
 OBJ_EXIST				=	.obj
 
 # ============================== Editable Area ============================== #
-PKG_NAME			=	put
+PKG_NAME			=	mini_printf
 
 PKGS				=	 \
 						common \
@@ -25,7 +25,48 @@ TST_PKGS				=	 \
 
 
 FILES				=	 \
-						put \
+						mini_printf \
+						put_num \
+
+### BEGIN
+# 42
+# 0
+# -42
+# 2147483646
+# 2147483647
+# -2147483647
+# -2147483648
+# 42
+# 0
+# 4294967295
+# 4294967294
+# 42
+# 0
+# -42
+# 9223372036854775806
+# 9223372036854775807
+# -9223372036854775807
+# -9223372036854775808
+# 42
+# 0
+# 18446744073709551615
+# 18446744073709551614
+# (null)
+# Hello world!
+
+# a
+# b
+# c
+# -1
+# 2
+# -1
+# 2
+# 2
+# 2
+# 7
+# testhello42
+# 92233720368547758064243atesta
+### END
 # ============================= End of Editable ============================= #
 
 SRCS					=	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(FILES)))
@@ -78,12 +119,15 @@ NO_LEAKS_STR			=	"All heap blocks were freed -- no leaks are possible"
 $(VALGRIND_LOG):			$(TST_NAME)
 							@valgrind $(VFLAGS) ./$(TST_NAME) > $(VALGRIND_LOG) 2>&1
 
+$(EXPECTED_RESULT_LOG):
+							@sed -n '/^### BEGIN$$/,/^### END$$/p' $(MAKEFILE_LIST) | sed '1d; $$d' | sed 's/^# //' > $(EXPECTED_RESULT_LOG)
+
 $(TST_NAME):				$(OBJS) $(TST_OBJS)
 							@PKG_OBJS=; \
 							TST_PKG_OBJS=; \
-							$(foreach pkg, $(PKGS), $(eval PKG_OBJS += $(PKG_DIR)/$(pkg)/$(shell make -C $(PKG_DIR)/$(pkg) print-objs;))) \
+							$(foreach pkg, $(PKGS), $(eval PKG_OBJS += $(addprefix $(PKG_DIR)/$(pkg)/, $(shell make -C $(PKG_DIR)/$(pkg) print-objs;)))) \
 							$(foreach tst_pkg, $(TST_PKGS), make -C $(PKG_DIR)/$(tst_pkg);) \
-							$(foreach tst_pkg, $(TST_PKGS), $(eval TST_PKG_OBJS += $(PKG_DIR)/$(tst_pkg)/$(shell make -C $(PKG_DIR)/$(tst_pkg) print-objs;))) \
+							$(foreach tst_pkg, $(TST_PKGS), $(eval TST_PKG_OBJS += $(addprefix $(PKG_DIR)/$(tst_pkg)/, $(shell make -C $(PKG_DIR)/$(tst_pkg) print-objs;)))) \
 							$(CC) $(CFLAGS) $(IFLAGS) $(TST_IFLAGS) $(OBJS) $(PKG_OBJS) $(TST_OBJS) $(TST_PKG_OBJS) -o $@
 
 $(TST_DIR)/$(OBJ_DIR)/%.o:	$(TST_DIR)/$(SRC_DIR)/%.c | $(TST_OBJ_EXIST)
@@ -154,22 +198,3 @@ test_clean:
 
 log_clean:
 							@$(RM) $(REAL_RESULT_LOG) $(EXPECTED_RESULT_LOG) $(VALGRIND_LOG) $(NORM_LOG)
-
-# ============================== Editable Area ============================== #
-$(EXPECTED_RESULT_LOG):
-							@touch $@
-							@echo "(null)" >> $@
-							@echo "Hello world!" >> $@
-							@echo "" >> $@
-							@echo "42" >> $@
-							@echo "0" >> $@
-							@echo "-42" >> $@
-							@echo "9223372036854775806" >> $@
-							@echo "9223372036854775807" >> $@
-							@echo "-9223372036854775807" >> $@
-							@echo "-9223372036854775808" >> $@
-							@echo "42" >> $@
-							@echo "0" >> $@
-							@echo "18446744073709551615" >> $@
-							@echo "18446744073709551614" >> $@
-# ============================= End of Editable ============================= #

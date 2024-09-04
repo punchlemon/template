@@ -23,10 +23,43 @@ PKGS					=	 \
 
 TST_PKGS				=	 \
 							common \
-							put \
+							mini_printf \
 
 FILES					=	 \
 							slice \
+
+### BEGIN
+# If *cap is NULL, update_cap return : -1
+# len = 0, cap = 0
+# update_cap result : 0
+# new cap : 0
+# len = 1, cap = 0
+# update_cap result : 1
+# new cap : 1
+# len = 200, cap = 0
+# update_cap result : 1
+# new cap : 256
+# len = 200, cap = 199
+# update_cap result : 1
+# new cap : 398
+# len = 200, cap = 200
+# update_cap result : 0
+# new cap : 200
+# len = 200, cap = 201
+# update_cap result : 0
+# new cap : 201
+# len = 1025, cap = 0
+# update_cap result : 1
+# new cap : 1280
+# len = 1025, cap = 1023
+# update_cap result : 1
+# new cap : 2046
+# len = 1025, cap = 1024
+# update_cap result : 1
+# new cap : 1280
+# 42
+# 64
+### END
 # ============================= End of Editable ============================= #
 
 SRCS					=	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(FILES)))
@@ -79,12 +112,15 @@ NO_LEAKS_STR			=	"All heap blocks were freed -- no leaks are possible"
 $(VALGRIND_LOG):			$(TST_NAME)
 							@valgrind $(VFLAGS) ./$(TST_NAME) > $(VALGRIND_LOG) 2>&1
 
+$(EXPECTED_RESULT_LOG):
+							@sed -n '/^### BEGIN$$/,/^### END$$/p' $(MAKEFILE_LIST) | sed '1d; $$d' | sed 's/^# //' > $(EXPECTED_RESULT_LOG)
+
 $(TST_NAME):				$(OBJS) $(TST_OBJS)
 							@PKG_OBJS=; \
 							TST_PKG_OBJS=; \
-							$(foreach pkg, $(PKGS), $(eval PKG_OBJS += $(PKG_DIR)/$(pkg)/$(shell make -C $(PKG_DIR)/$(pkg) print-objs;))) \
+							$(foreach pkg, $(PKGS), $(eval PKG_OBJS += $(addprefix $(PKG_DIR)/$(pkg)/, $(shell make -C $(PKG_DIR)/$(pkg) print-objs;)))) \
 							$(foreach tst_pkg, $(TST_PKGS), make -C $(PKG_DIR)/$(tst_pkg);) \
-							$(foreach tst_pkg, $(TST_PKGS), $(eval TST_PKG_OBJS += $(PKG_DIR)/$(tst_pkg)/$(shell make -C $(PKG_DIR)/$(tst_pkg) print-objs;))) \
+							$(foreach tst_pkg, $(TST_PKGS), $(eval TST_PKG_OBJS += $(addprefix $(PKG_DIR)/$(tst_pkg)/, $(shell make -C $(PKG_DIR)/$(tst_pkg) print-objs;)))) \
 							$(CC) $(CFLAGS) $(IFLAGS) $(TST_IFLAGS) $(OBJS) $(PKG_OBJS) $(TST_OBJS) $(TST_PKG_OBJS) -o $@
 
 $(TST_DIR)/$(OBJ_DIR)/%.o:	$(TST_DIR)/$(SRC_DIR)/%.c | $(TST_OBJ_EXIST)
@@ -155,38 +191,3 @@ test_clean:
 
 log_clean:
 							@$(RM) $(REAL_RESULT_LOG) $(EXPECTED_RESULT_LOG) $(VALGRIND_LOG) $(NORM_LOG)
-
-# ============================== Editable Area ============================== #
-$(EXPECTED_RESULT_LOG):
-							@touch $@
-							@echo "If *cap is NULL, update_cap return : -1" >> $@
-							@echo "len = 0, cap = 0" >> $@
-							@echo "update_cap result : 0" >> $@
-							@echo "new cap : 0" >> $@
-							@echo "len = 1, cap = 0" >> $@
-							@echo "update_cap result : 1" >> $@
-							@echo "new cap : 1" >> $@
-							@echo "len = 200, cap = 0" >> $@
-							@echo "update_cap result : 1" >> $@
-							@echo "new cap : 256" >> $@
-							@echo "len = 200, cap = 199" >> $@
-							@echo "update_cap result : 1" >> $@
-							@echo "new cap : 398" >> $@
-							@echo "len = 200, cap = 200" >> $@
-							@echo "update_cap result : 0" >> $@
-							@echo "new cap : 200" >> $@
-							@echo "len = 200, cap = 201" >> $@
-							@echo "update_cap result : 0" >> $@
-							@echo "new cap : 201" >> $@
-							@echo "len = 1025, cap = 0" >> $@
-							@echo "update_cap result : 1" >> $@
-							@echo "new cap : 1280" >> $@
-							@echo "len = 1025, cap = 1023" >> $@
-							@echo "update_cap result : 1" >> $@
-							@echo "new cap : 2046" >> $@
-							@echo "len = 1025, cap = 1024" >> $@
-							@echo "update_cap result : 1" >> $@
-							@echo "new cap : 1280" >> $@
-							@echo "42" >> $@
-							@echo "64" >> $@
-# ============================= End of Editable ============================= #

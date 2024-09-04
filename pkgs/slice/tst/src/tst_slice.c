@@ -17,21 +17,21 @@ void	print_update(uint64_t len, uint64_t cap)
 	int	result;
 
 	put("len = ");
-	put_ud64(len);
+	put_u(len);
 	put(", cap = ");
-	put_ud64(cap);
+	put_u(cap);
 	put("\nupdate_cap result : ");
 	result = update_cap(len, &cap);
-	put_d64(result);
+	put_d(result);
 	put("\nnew cap : ");
-	put_ud64(cap);
+	put_u(cap);
 	put("\n");
 }
 
 void	tst_update_cap(void)
 {
 	put("If *cap is NULL, update_cap return : ");
-	put_d64(update_cap(42, NULL));
+	put_d(update_cap(42, NULL));
 	put("\n");
 	print_update(0, 0);
 	print_update(1, 0);
@@ -51,9 +51,9 @@ void	tst_create_byte_slice(void)
 	s = create_byte_slice(42);
 	if (!s)
 		return ((void)put((char *)s));
-	put_ud64(s->l);
+	put_u(s->l);
 	put("\n");
-	put_ud64(s->c);
+	put_u(s->c);
 	delete_byte_slice(s);
 	put("\n");
 }
