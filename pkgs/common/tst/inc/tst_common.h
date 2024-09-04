@@ -13,7 +13,7 @@
 #ifndef TST_COMMON_H
 # define TST_COMMON_H
 # include <unistd.h>
-# include "put.h"
+# include "mini_printf.h"
 # include "common.h"
 
 void	tst_ft_strlen(void);

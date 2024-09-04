@@ -12,7 +12,7 @@
 
 #ifndef TST_SLICE_H
 # define TST_SLICE_H
-# include "put.h"
+# include "mini_printf.h"
 # include "slice.h"
 
 // function
