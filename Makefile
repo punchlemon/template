@@ -5,6 +5,7 @@ INC_DIR					=	inc
 SRC_DIR					=	src
 OBJ_DIR					=	obj
 PKG_DIR					=	pkgs
+NPD_FLAG				=	--no-print-directory
 
 PKGS					=	 \
 							common \
@@ -44,13 +45,16 @@ val:						re
 							@code $(LOGFILE)
 
 $(NAME):					$(OBJS)
-							@make all --no-print-directory -C $(PKG_DIR)
+							@make all $(NPD_FLAG) -C $(PKG_DIR)
 							@$(CC) $(OBJS) $(LFLAGS) -o $(NAME)
 
-lib_clean:
-							@make clean --no-print-directory -C $(PKG_DIR)
+pkg_clean:
+							@make clean $(NPD_FLAG) -C $(PKG_DIR)
 
-clean:						lib_clean
+pkg_test:
+							@$(foreach pkg, $(PKGS), make $(NPD_FLAG) -C $(PKG_DIR)/$(pkg) test;)
+
+clean:						pkg_clean
 							@$(RM) -rf $(OBJ_DIR)
 
 fclean:						clean
@@ -74,7 +78,7 @@ define check_norminette
 							@if norminette $1 | grep -q Error; then \
 								norminette $1 | grep Error; \
 							else \
-								echo "$1: OK!"; \
+								echo "$1: $(GRN)OK$(DEF)"; \
 							fi
 endef
 
@@ -87,12 +91,18 @@ $(MAKE_SAMPLE):
 $(MAKE_LOG):
 							@touch $(MAKE_LOG)
 
-make_check:					make_diff make_clean
+make_check:					make_log_clean make_diff make_clean
 
 make_diff:					$(MAKE_SAMPLE) $(MAKE_LOG)
 							@$(foreach pkg, $(PKGS), awk '/^# ============================== Editable Area ============================== #/{f=1} /^# ============================= End of Editable ============================= #/{f=0; next} !f' $(PKG_DIR)/$(pkg)/Makefile > $(pkg)make;)
-							@$(foreach pkg, $(PKGS), colordiff $(MAKE_SAMPLE) $(pkg)make;) >> $(MAKE_LOG)
-							@if [ ! -s $(MAKE_LOG) ]; then \
+							@success=true; \
+							for pkg in $(PKGS); do \
+								echo "==== $$pkg ====" >> $(MAKE_LOG); \
+								if ! diff $(MAKE_SAMPLE) $$pkg\make >> $(MAKE_LOG); then \
+									success=false; \
+								fi; \
+							done; \
+							if [ $$success = true ]; then \
 								rm -f $(MAKE_LOG); \
 								echo "Makefile is all $(GRN)OK$(DEF)"; \
 							else \
@@ -102,6 +112,9 @@ make_diff:					$(MAKE_SAMPLE) $(MAKE_LOG)
 make_clean:
 							@$(foreach pkg, $(PKGS), $(RM) $(pkg)make)
 							@$(RM) $(MAKE_SAMPLE)
+
+make_log_clean:
+							@$(RM) $(MAKE_LOG)
 
 ### BEGIN
 # .PHONY:						all print-objs clean re otest mtest ntest test output_test memory_test norminette_test test_clean
@@ -129,7 +142,7 @@ make_clean:
 
 # $(OBJ_DIR)/%.o:				$(SRC_DIR)/%.c | $(OBJ_EXIST)
 # 							@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
-# 							@$(foreach pkg, $(PKGS), make -C $(PKG_DIR)/$(pkg);)
+# 							@$(foreach pkg, $(PKGS), make $(NPD_FLAG) -C $(PKG_DIR)/$(pkg);)
 
 # $(OBJ_EXIST):
 # 							@mkdir -p $(OBJ_DIR)
@@ -139,7 +152,7 @@ make_clean:
 
 # clean:
 # 							@$(RM) -rf $(OBJ_DIR)
-# 							@$(foreach pkg, $(PKGS), make -C $(PKG_DIR)/$(pkg) clean;)
+# 							@$(foreach pkg, $(PKGS), make $(NPD_FLAG) -C $(PKG_DIR)/$(pkg) clean;)
 
 # re:							clean all
 
@@ -148,6 +161,8 @@ make_clean:
 # DEF						=	\033[0m
 # RED						=	\033[31m
 # GRN						=	\033[32m
+# YLW						=	\033[33m
+# BLU						=	\033[34m
 
 # TST_IFLAGS				=	 -I$(TST_DIR)/$(INC_DIR) $(foreach tst_pkg, $(TST_PKGS), -I$(PKG_DIR)/$(tst_pkg)/$(INC_DIR))
 # VFLAGS					=	 \
@@ -178,9 +193,9 @@ make_clean:
 # $(TST_NAME):				$(OBJS) $(TST_OBJS)
 # 							@PKG_OBJS=; \
 # 							TST_PKG_OBJS=; \
-# 							$(foreach pkg, $(PKGS), $(eval PKG_OBJS += $(addprefix $(PKG_DIR)/$(pkg)/, $(shell make -C $(PKG_DIR)/$(pkg) print-objs;)))) \
-# 							$(foreach tst_pkg, $(TST_PKGS), make -C $(PKG_DIR)/$(tst_pkg);) \
-# 							$(foreach tst_pkg, $(TST_PKGS), $(eval TST_PKG_OBJS += $(addprefix $(PKG_DIR)/$(tst_pkg)/, $(shell make -C $(PKG_DIR)/$(tst_pkg) print-objs;)))) \
+# 							$(foreach pkg, $(PKGS), $(eval PKG_OBJS += $(addprefix $(PKG_DIR)/$(pkg)/, $(shell make $(NPD_FLAG) -C $(PKG_DIR)/$(pkg) print-objs;)))) \
+# 							$(foreach tst_pkg, $(TST_PKGS), make $(NPD_FLAG) -C $(PKG_DIR)/$(tst_pkg);) \
+# 							$(foreach tst_pkg, $(TST_PKGS), $(eval TST_PKG_OBJS += $(addprefix $(PKG_DIR)/$(tst_pkg)/, $(shell make $(NPD_FLAG) -C $(PKG_DIR)/$(tst_pkg) print-objs;)))) \
 # 							$(CC) $(CFLAGS) $(IFLAGS) $(TST_IFLAGS) $(OBJS) $(PKG_OBJS) $(TST_OBJS) $(TST_PKG_OBJS) -o $@
 
 # $(TST_DIR)/$(OBJ_DIR)/%.o:	$(TST_DIR)/$(SRC_DIR)/%.c | $(TST_OBJ_EXIST)
@@ -190,11 +205,13 @@ make_clean:
 # 							@mkdir -p $(TST_DIR)/$(OBJ_DIR)
 
 # define ok
-# 							echo "$(PKG_NAME) is $(GRN)OK$(DEF)"
+# 							echo -n $1; \
+# 							echo "$(GRN)OK$(DEF)"
 # endef
 
 # define ko
-# 							echo "$(PKG_NAME) is $(RED)KO!$(DEF)"
+# 							echo -n $1; \
+# 							echo "$(RED)KO!$(DEF)"
 # endef
 
 # otest:						output_test
@@ -203,25 +220,28 @@ make_clean:
 
 # ntest:						norminette_test
 
-# test:						output_test norminette_test test_clean
+# test:						test_start output_test memory_test norminette_test test_clean
 
 # retest:						log_clean test
+
+# test_start:
+# 							@echo "$(YLW)$(PKG_NAME)$(DEF)"
 
 # output_test:				$(TST_NAME) $(EXPECTED_RESULT_LOG)
 # 							@./$(TST_NAME) > $(REAL_RESULT_LOG) 2>&1
 # 							@if cmp -s $(REAL_RESULT_LOG) $(EXPECTED_RESULT_LOG); then \
-# 								$(call ok); \
+# 								$(call ok, "output test: "); \
 # 								rm $(REAL_RESULT_LOG) $(EXPECTED_RESULT_LOG); \
 # 							else \
-# 								$(call ko); \
+# 								$(call ko, "output test: "); \
 # 							fi
 
 # memory_test:				$(VALGRIND_LOG)
 # 							@if grep -q $(NO_LEAKS_STR) $(VALGRIND_LOG) && grep -q $(NO_ERROR_STR) $(VALGRIND_LOG); then \
-# 								$(call ok); \
+# 								$(call ok, "memory test: "); \
 # 								rm $(VALGRIND_LOG); \
 # 							else \
-# 								$(call ko); \
+# 								$(call ko, "memory test: "); \
 # 							fi
 
 # norminette_test:
@@ -231,10 +251,10 @@ make_clean:
 # 							$(call check_norminette, $(INC_DIR)); \
 # 							$(call check_norminette, $(TST_DIR)); \
 # 							if [ $$NORM_ERROR_FOUND -eq 0 ]; then \
-# 								$(call ok); \
+# 								$(call ok, " norm  test: "); \
 # 								rm $(NORM_LOG); \
 # 							else \
-# 								$(call ko); \
+# 								$(call ko, " norm  test: "); \
 # 							fi
 
 # define check_norminette
@@ -246,7 +266,7 @@ make_clean:
 
 # test_clean:
 # 							@$(RM) -rf $(TST_DIR)/$(OBJ_DIR)
-# 							@$(foreach tst_pkg, $(TST_PKGS), make -C $(PKG_DIR)/$(tst_pkg) clean;)
+# 							@$(foreach tst_pkg, $(TST_PKGS), make $(NPD_FLAG) -C $(PKG_DIR)/$(tst_pkg) clean;)
 # 							@$(RM) $(TST_NAME)
 
 # log_clean:
