@@ -45,11 +45,11 @@ val:						re
 							@code $(LOGFILE)
 
 $(NAME):					$(OBJS)
-							@make all $(NPD_FLAG) -C $(PKG_DIR)
+							@$(foreach pkg, $(PKGS), make $(NPD_FLAG) -C $(PKG_DIR)/$(pkg) all;)
 							@$(CC) $(OBJS) $(LFLAGS) -o $(NAME)
 
 pkg_clean:
-							@make clean $(NPD_FLAG) -C $(PKG_DIR)
+							@$(foreach pkg, $(PKGS), make $(NPD_FLAG) -C $(PKG_DIR)/$(pkg) clean;)
 
 pkg_test:
 							@$(foreach pkg, $(PKGS), make $(NPD_FLAG) -C $(PKG_DIR)/$(pkg) test;)
