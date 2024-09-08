@@ -132,13 +132,11 @@ $(TST_OBJ_EXIST):
 							@mkdir -p $(TST_DIR)/$(OBJ_DIR)
 
 define ok
-							echo -n $1; \
-							echo "$(GRN)OK$(DEF)"
+							echo $1"$(GRN)OK$(DEF)"
 endef
 
 define ko
-							echo -n $1; \
-							echo "$(RED)KO!$(DEF)"
+							echo $1"$(RED)KO!$(DEF)"
 endef
 
 otest:						output_test
@@ -148,6 +146,8 @@ mtest:						memory_test
 ntest:						norminette_test
 
 test:						test_start output_test memory_test norminette_test test_clean
+
+mac:						test_start output_test norminette_test test_clean
 
 retest:						log_clean test
 
@@ -192,6 +192,7 @@ define check_norminette
 endef
 
 test_clean:
+							@$(RM) -rf $(OBJ_DIR)
 							@$(RM) -rf $(TST_DIR)/$(OBJ_DIR)
 							@$(foreach tst_pkg, $(TST_PKGS), make $(NPD_FLAG) -C $(PKG_DIR)/$(tst_pkg) clean;)
 							@$(RM) $(TST_NAME)

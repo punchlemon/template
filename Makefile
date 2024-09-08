@@ -55,6 +55,9 @@ pkg_clean:
 pkg_test:
 							@$(foreach pkg, $(PKGS), make $(NPD_FLAG) -C $(PKG_DIR)/$(pkg) test;)
 
+pkg_mac:
+							@$(foreach pkg, $(PKGS), make $(NPD_FLAG) -C $(PKG_DIR)/$(pkg) mac;)
+
 clean:						pkg_clean
 							@$(RM) -rf $(OBJ_DIR)
 
@@ -206,13 +209,11 @@ make_log_clean:
 # 							@mkdir -p $(TST_DIR)/$(OBJ_DIR)
 
 # define ok
-# 							echo -n $1; \
-# 							echo "$(GRN)OK$(DEF)"
+# 							echo $1"$(GRN)OK$(DEF)"
 # endef
 
 # define ko
-# 							echo -n $1; \
-# 							echo "$(RED)KO!$(DEF)"
+# 							echo $1"$(RED)KO!$(DEF)"
 # endef
 
 # otest:						output_test
@@ -222,6 +223,8 @@ make_log_clean:
 # ntest:						norminette_test
 
 # test:						test_start output_test memory_test norminette_test test_clean
+
+# mac:						test_start output_test norminette_test test_clean
 
 # retest:						log_clean test
 
@@ -266,6 +269,7 @@ make_log_clean:
 # endef
 
 # test_clean:
+# 							@$(RM) -rf $(OBJ_DIR)
 # 							@$(RM) -rf $(TST_DIR)/$(OBJ_DIR)
 # 							@$(foreach tst_pkg, $(TST_PKGS), make $(NPD_FLAG) -C $(PKG_DIR)/$(tst_pkg) clean;)
 # 							@$(RM) $(TST_NAME)
