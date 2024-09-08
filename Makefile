@@ -9,6 +9,7 @@ NPD_FLAG				=	--no-print-directory
 
 PKGS					=	 \
 							common \
+							mem \
 							mini_printf \
 							slice \
 
