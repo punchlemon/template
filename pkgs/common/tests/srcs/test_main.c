@@ -1,23 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tst_slice.h                                        :+:      :+:    :+:   */
+/*   test_main.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/01 16:18:17 by retanaka          #+#    #+#             */
-/*   Updated: 2024/09/01 16:18:18 by retanaka         ###   ########.fr       */
+/*   Created: 2024/09/01 15:36:21 by retanaka          #+#    #+#             */
+/*   Updated: 2024/09/09 22:19:11 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TST_SLICE_H
-# define TST_SLICE_H
-# include "mini_printf.h"
-# include "slice.h"
+#include "test_common.h"
 
-// function
-void	tst_update_cap(void);
-void	tst_create_byte_slice(void);
-void	tst_delete_byte_slice(void);
-
-#endif
+int	main(void)
+{
+	test_ft_strlen();
+	return (0);
+}

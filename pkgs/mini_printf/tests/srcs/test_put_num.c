@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tst_put_num.c                                      :+:      :+:    :+:   */
+/*   test_put_num.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 19:12:32 by retanaka          #+#    #+#             */
-/*   Updated: 2024/09/04 11:37:15 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/09/09 22:22:44 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tst_mini_printf.h"
+#include "test_mini_printf.h"
 
-void	tst_put_d(void)
+void	test_put_d(void)
 {
 	put_d(42);
 	put("\n");
@@ -30,7 +30,7 @@ void	tst_put_d(void)
 	put("\n");
 }
 
-void	tst_put_u(void)
+void	test_put_u(void)
 {
 	put_u(42);
 	put("\n");
@@ -42,7 +42,7 @@ void	tst_put_u(void)
 	put("\n");
 }
 
-void	tst_put_ld(void)
+void	test_put_ld(void)
 {
 	put_ld(42);
 	put("\n");
@@ -60,7 +60,7 @@ void	tst_put_ld(void)
 	put("\n");
 }
 
-void	tst_put_lu(void)
+void	test_put_lu(void)
 {
 	put_lu(42);
 	put("\n");

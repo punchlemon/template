@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tst_mini_printf.c                                  :+:      :+:    :+:   */
+/*   test_mini_printf.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/04 11:32:44 by retanaka          #+#    #+#             */
-/*   Updated: 2024/09/04 11:32:45 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/09/09 22:22:19 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tst_mini_printf.h"
+#include "test_mini_printf.h"
 
-void	tst_put(void)
+void	test_put(void)
 {
 	put(NULL);
 	put("\n");
@@ -22,7 +22,7 @@ void	tst_put(void)
 	put("\n");
 }
 
-void	tst_put_char(void)
+void	test_put_char(void)
 {
 	put_char('a');
 	put_char('\n');
@@ -32,7 +32,7 @@ void	tst_put_char(void)
 	put_char('\n');
 }
 
-void	tst_print_count(void)
+void	test_print_count(void)
 {
 	int	count;
 
@@ -55,11 +55,11 @@ void	tst_print_count(void)
 	put("\n");
 }
 
-void	tst_put_arg(void)
+void	test_put_arg(void)
 {
 }
 
-void	tst_mini_printf(void)
+void	test_mini_printf(void)
 {
 	mini_printf("test%s%d\n", "hello", 42);
 	mini_printf("%ld%d%d%ctest%a", 9223372036854775806, 42, 43, 'a');

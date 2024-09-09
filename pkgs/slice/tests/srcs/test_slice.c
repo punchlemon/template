@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tst_slice.c                                        :+:      :+:    :+:   */
+/*   test_slice.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/28 19:12:32 by retanaka          #+#    #+#             */
-/*   Updated: 2024/08/28 19:12:34 by retanaka         ###   ########.fr       */
+/*   Updated: 2024/09/09 22:28:22 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tst_slice.h"
+#include "test_slice.h"
 
 void	print_update(uint64_t len, uint64_t cap)
 {
@@ -28,7 +28,7 @@ void	print_update(uint64_t len, uint64_t cap)
 	put("\n");
 }
 
-void	tst_update_cap(void)
+void	test_update_cap(void)
 {
 	put("If *cap is NULL, update_cap return : ");
 	put_d(update_cap(42, NULL));
@@ -44,7 +44,7 @@ void	tst_update_cap(void)
 	print_update(1025, 1024);
 }
 
-void	tst_create_byte_slice(void)
+void	test_create_byte_slice(void)
 {
 	t_slice	*s;
 
@@ -58,7 +58,7 @@ void	tst_create_byte_slice(void)
 	put("\n");
 }
 
-void	tst_delete_byte_slice(void)
+void	test_delete_byte_slice(void)
 {
 	t_slice	*s;
 

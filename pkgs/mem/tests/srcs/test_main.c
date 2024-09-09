@@ -1,21 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tst_common.h                                       :+:      :+:    :+:   */
+/*   test_main.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: retanaka <retanaka@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/01 15:42:13 by retanaka          #+#    #+#             */
-/*   Updated: 2024/09/01 15:42:14 by retanaka         ###   ########.fr       */
+/*   Created: 2024/09/01 16:19:09 by retanaka          #+#    #+#             */
+/*   Updated: 2024/09/09 22:26:58 by retanaka         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef TST_COMMON_H
-# define TST_COMMON_H
-# include <unistd.h>
-# include "mini_printf.h"
-# include "common.h"
+#include "test_mem.h"
 
-void	tst_ft_strlen(void);
-
-#endif
+int	main(void)
+{
+	return (0);
+}
