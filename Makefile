@@ -113,8 +113,11 @@ make_diff:					$(MAKE_SAMPLE) $(MAKE_LOG)
 								echo "Makefile is $(RED)KO!$(DEF)"; \
 							fi
 
+make_sync:
+							@$(foreach pkg, $(PKGS), make $(NPD_FLAG) -C $(PKG_DIR)/$(pkg) make_sync SYNC_PKG=$(SYNC_PKG);)
+
 make_clean:
-							@$(foreach pkg, $(PKGS), $(RM) $(pkg)make)
+							@$(foreach pkg, $(PKGS), $(RM) $(pkg)make;)
 							@$(RM) $(MAKE_SAMPLE)
 
 make_log_clean:

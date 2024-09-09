@@ -1,3 +1,17 @@
+# ============================== Editable Area ============================== #
+PKG_NAME				=	mem
+
+PKGS					=	 \
+							slice \
+
+TST_PKGS				=	 \
+
+FILES					=	 \
+							mem \
+
+### BEGIN
+### END
+# ============================= End of Editable ============================= #
 .PHONY:						all print-objs clean re otest mtest ntest test output_test memory_test norminette_test test_clean
 LIB						=	lib
 PKG_DIR					=	..
@@ -15,20 +29,6 @@ IFLAGS					=	-I$(INC_DIR) $(foreach pkg, $(PKGS), -I$(PKG_DIR)/$(pkg)/$(INC_DIR)
 
 OBJ_EXIST				=	.obj
 
-# ============================== Editable Area ============================== #
-PKG_NAME				=	mem
-
-PKGS					=	 \
-							slice \
-
-TST_PKGS				=	 \
-
-FILES					=	 \
-							mem \
-
-### BEGIN
-### END
-# ============================= End of Editable ============================= #
 
 SRCS					=	$(addprefix $(SRC_DIR)/, $(addsuffix .c, $(FILES)))
 OBJS					=	$(addprefix $(OBJ_DIR)/, $(addsuffix .o, $(FILES)))
@@ -167,3 +167,18 @@ test_clean:
 
 log_clean:
 							@$(RM) $(REAL_RESULT_LOG) $(EXPECTED_RESULT_LOG) $(VALGRIND_LOG) $(NORM_LOG)
+
+MAKEFILE				=	Makefile
+MAKEFILE_TMP			=	Makefile_tmp
+
+make_sync:
+							@if [ -z "$(SYNC_PKG)" ]; then \
+								echo "Error: SYNC_PKG is empty."; \
+								exit 0; \
+							else \
+								awk '/^# ============================== Editable Area ============================== #/{f=1} /^# ============================= End of Editable ============================= #/{print; f=0} f' Makefile > Makefile_tmp; \
+								awk '/^# ============================== Editable Area ============================== #/{f=1} /^# ============================= End of Editable ============================= #/{f=0; next} !f' $(PKG_DIR)/$(SYNC_PKG)/Makefile >> $(MAKEFILE_TMP); \
+								awk '/^$(EDITABLE_START)/{f=1} /^$(EDITABLE_END)/{f=0; next} !f' $(PKG_DIR)/$(SYNC_PKG)/Makefile >> $(MAKEFILE_TMP); \
+								$(RM) $(MAKEFILE); \
+								mv $(MAKEFILE_TMP) $(MAKEFILE); \
+							fi
